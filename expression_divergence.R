@@ -1,11 +1,20 @@
 # ---
-# title: "Gene expression divergence"
-# date: "2025-12-02"
-# author: Adam, Carolina L.
+# Title: expression_divergence.R
+# Date: 2025
+# Author: Adam, Carolina L.
+# Purpose: Calculate log2 fold-change expression divergence
 # ---
 
-# Running limma with recommendations from Law et al. (2018)
+required_packages <- c("biomaRt", "limma", "dplyr", "stringr", "tidyr", "ggplot2")
 
+# Check and install missing packages
+install_if_missing <- function(pkg) {
+  if (!require(pkg, character.only = TRUE)) {
+    install.packages(pkg, dependencies = TRUE)
+    library(pkg, character.only = TRUE)
+  }
+}
+invisible(lapply(required_packages, install_if_missing))
 library(BiocManager)
 BiocManager::install("limma")
 BiocManager::install("biomaRt")
@@ -16,11 +25,11 @@ library(dplyr)
 library(stringr)
 library(tidyr)
 library(ggplot2)
-library(ggrastr)
-library(rstatix)
-library(ggpubr)
 
-expr <- read.table("", header=T, sep="\t")
+# Running limma with recommendations from Law et al. (2018)
+
+# Expression data from Brawand et al. 2011
+expr <- read.table("NormalizedRPKM_ConstitutiveExons_Primate1to1Orthologues.txt", header=T, sep="\t")
 
 # keep only human and chimp data
 expr <- expr %>% select(starts_with("hsa"), starts_with("ptr"))
@@ -47,14 +56,14 @@ expr_long <- expr_samples %>%
 # write long format table
 write.table(expr_long, "rpkm_human_and_chimp_long_table.txt", col.names=T, row.names=F, sep="\t", quote=F)
 
-# See if expression values are normalized per individual per tissue
+# Confirm that expression values are normalized per individual per tissue
 ggplot(expr_long, aes(x = sample_id, y = expr + 1, fill = species)) +
   geom_boxplot(outlier.shape = 1, width=0.1, position = position_dodge(width = 0.8), show.legend = FALSE) + 
   geom_violin(trim=F, show.legend=F, alpha=0.5) +
   facet_wrap(~ tissue, scales="free") +
   scale_fill_manual(values = c("hsa" = "#5C608A", "ptr" = "#8A865D")) +
   scale_x_discrete(name = "sample") +
-  scale_y_continuous(trans="log1p", name = "Expression (log1p))") +
+  scale_y_continuous(trans="log1p", name = "Expression") +
   theme_bw() +
   theme(
     axis.line = element_line(linewidth = 1, colour = "black"),
@@ -86,11 +95,9 @@ avg_expr <- expr_long_filtered %>%
     values_from = mean_expr,
     names_prefix = "avg_")
 
-###################################################################
-################# Running limma per tissue ########################
-###################################################################
+### Running limma per tissue ###
 
-# start here with long format table
+# start here with filtered long format table
 # tissues: br, cb, ht, kd, lv, ts
 
 tissue_code <- "br"
@@ -125,15 +132,16 @@ colnames(design) <- c("chimp", "human")
 contr_matrix <- makeContrasts(human_vs_chimp = human - chimp, levels = design)
 
 # Run limma
-fit <- lmFit(mat_log, design) # fir a linear model per gene per species
+fit <- lmFit(mat_log, design) # fit a linear model per gene per species
 fit2 <- contrasts.fit(fit, contrasts = contr_matrix) # apply the contrast to the linear model
 fit2 <- eBayes(fit2) # performs empirical Bayes moderation of the standard errors - uses info from all genes to stabilize variance per gene
 
-plotSA(fit2) # you should not see mean-variance dependence - variance should not be dependent on mean expression values
+# check for mean-variance dependence
+plotSA(fit2) # variance should not be dependent on mean expression values
 
 # access significance using adjusted p-value
 de <- decideTests(fit2)
-summary(de) # just number of genes
+summary(de)
 
 # Convert DE results (decideTests) to tibbles
 de_df <- as.data.frame(de) %>%
@@ -152,12 +160,12 @@ de_treat_df <- as.data.frame(de_treat) %>%
   tibble::rownames_to_column("hsa_id") %>%
   dplyr::rename(de_treat = human_vs_chimp)
 
-# get you limma results 
+# get limma results 
 tt <- topTable(fit2, coef = 1, number = Inf) %>%
   tibble::rownames_to_column("hsa_id") %>%
   dplyr::mutate(tissue = tissue_code) 
 
-# get your limma results with "treat"
+# get limma results with TREAT
 tt_treat <- topTable(fit2_treat, coef = 1, number = Inf, sort.by = "none") %>%
   tibble::rownames_to_column("hsa_id") %>%
   dplyr::rename(
@@ -182,4 +190,4 @@ tt_final <- tt %>%
   dplyr::select(-logFC_treat, -AveExpr_treat)
 
 write.table(tt_final, "limma_results_brain.txt", col.names=T, row.names=F, sep="\t", quote=F)
-# You can loop through each tissue to get the full table results
+# Loop through each tissue to get the full table results
