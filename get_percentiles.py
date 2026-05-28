@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 """
-Author: Adam, Carolina de Lima
+Title: get_percentiles.py
 Date: 2025
+Author: Adam, Carolina de Lima
 Purpose:
     Calculate summary statistics (mean, variance, 5th and 95th percentiles)
     for allele metrics per locus from a tab-separated input file.
-
 Input format:
     A tab-separated file where:
     - First column locus identifier
     - Subsequent columns are numeric allele statistics (can contain '.' for missing data)
-
-    *Lines with fewer than two numeric values after filtering missing data are skipped.
-    
+    *Lines with fewer than two numeric values after filtering missing data are skipped. 
 Output:
     A tab-separated file with columns:
     locus_id, mean, variance, percentile_5, percentile_95
