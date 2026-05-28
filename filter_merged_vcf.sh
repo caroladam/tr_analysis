@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# ---
+# Title: filter_merged_vcf.sh
+# Date: 2025
+# Author: Adam, Carolina de Lima
+# Purpose: filter multi-sample VCF file
+# ---
+
 # Default values for parameters
 MAX_MISSING=1
 SD_THRESHOLD=3
