@@ -1,3 +1,19 @@
+#!/bin/env python3
+
+"""
+Author: Adam, Carolina de Lima
+Date: 2025
+Purpose:
+    Calculate observed and expected heterozygosity based on TR allele lengths.
+
+Input format:
+    A VCF file with:
+    - FORMAT field containing AL (allele length) and TDID (from TRGT - Dolzhenko et al. 2024)
+Output:
+    A tab-separated file with columns:
+    locus_id, sample, obs_het, exp_het
+"""
+
 import sys
 from pathlib import Path
 from cyvcf2 import VCF
