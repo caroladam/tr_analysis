@@ -39,11 +39,11 @@ main <- ggplot(df, aes(x = ratio_homo, y = ratio_pantro)) +
     panel.grid.minor = element_blank(),
     panel.border = element_blank(),
     panel.background = element_blank(),
-    text = element_text(size = 16),
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
-    axis.text.x = element_text(colour = "black", size = 16, angle = 45, vjust = 0.5),
-    axis.text.y = element_text(colour = "black", size = 16)) 
+    text = element_text(size = 6, family = "Helvetica"),
+    axis.title.x = element_text(colour = "black", size = 6, family = "Helvetica"),
+    axis.title.y = element_text(colour = "black", size = 6, family = "Helvetica"),
+    axis.text.x = element_text(colour = "black", size = 6, family = "Helvetica", angle = 45, vjust = 0.5),
+    axis.text.y = element_text(colour = "black", size = 6, family = "Helvetica")) 
 
 # plot corner boxes with limits of the top categories
 bounds_high_both <- highlight_data %>%
@@ -83,9 +83,9 @@ xhist <- ggplot(df, aes(x = ratio_homo)) +
     axis.title.x = element_blank(),
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank(),
-    text = element_text(size = 10),
-    axis.title.y = element_text(size = 10),
-    axis.text.y = element_text(colour = "black", size = 10))
+    text = element_text(colour = "black", size = 5, family = "Helvetica"),
+    axis.title.y = element_text(colour = "black", size = 5, family = "Helvetica"),
+    axis.text.y = element_text(colour = "black", size = 5, family = "Helvetica"))
 
 # HMarginal histogram of chimp ratio (right)
 yhist <- ggplot(df, aes(x = ratio_pantro)) +
@@ -103,9 +103,9 @@ yhist <- ggplot(df, aes(x = ratio_pantro)) +
     axis.title.y = element_blank(),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),
-    text = element_text(size = 10),
-    axis.title.x = element_text(size = 10),
-    axis.text.x = element_text(colour = "black", size = 10))
+    text = element_text(colour = "black", size = 5, family = "Helvetica"),
+    axis.title.y = element_text(colour = "black", size = 5, family = "Helvetica"),
+    axis.text.y = element_text(colour = "black", size = 5, family = "Helvetica"))
 
 # Add points with outliers
 main <- main +
@@ -120,3 +120,5 @@ main <- main +
 
 final_plot <- (xhist + plot_spacer() + main + yhist) + 
   plot_layout(widths = c(4, 1), heights = c(1, 4))
+
+ggsave("human_pantro_ratio_heatmap.pdf", plot = final_plot, device = cairo_pdf, width = 6, height = 6)
