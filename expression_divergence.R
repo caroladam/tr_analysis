@@ -3,6 +3,7 @@
 # Date: 2025
 # Author: Adam, Carolina L.
 # Purpose: Calculate log2 fold-change expression divergence
+# Input file: Normalized RPKM expression values from Brawand et al. (2011) - doi:10.1038/nature10532
 # ---
 
 required_packages <- c("biomaRt", "limma", "dplyr", "stringr", "tidyr", "ggplot2")
