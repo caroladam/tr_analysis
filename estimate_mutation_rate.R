@@ -1,3 +1,16 @@
+# ---
+# Title: estimate_mutation_rate.R
+# Date: 2025
+# Authors: Sudmant, Pete H. & Adam, Carolina L.
+# Purpose: Calculate TR mutation rate using genetic distance-based methods and compare to de novo pedigree estimates
+# Inputs:
+  # Tab-delimited files containing de novo TR mutation rate estimates from pedigree data from Porubsky et al. (2025) - doi:10.1038/s41586-025-08922-2
+  # A tab-delimited file with TR copy number from humans and chimpanzees
+# Outputs:
+  # Genetic distance-based TR mutation rate estimates per motif category
+  # Line plot comparing distance and pedigree-based TR mutation rate estimates across motif lengths
+# ---
+
 required_packages <- c("ggplot2", "dplyr", "tidyr", "readr", "rstatix", "ggpubr")
 
 # Check and install missing packages
