@@ -3,8 +3,10 @@
 # Date: 2025
 # Author: Adam, Carolina L.
 # Purpose: Calculate HKA-like divergence-diversity TR ratio
+# Input:
+  # A tab-delimited file with TR allele lengths from humans and chimpanzees
 # Output:
-  # A tab-separated file with columns:
+  # A tab-delimited file with columns:
   # tr_id, mean_homo_len, mean_pantro_len, var_homo, var_pantro, var_between, ratio_homo, ratio_pantro
 # ---
 
