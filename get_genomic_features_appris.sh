@@ -5,6 +5,11 @@
 # Date: 2025
 # Author: Adam, Carolina L.
 # Purpose: Determine CHM13 genomic features from annotation file (GFF)
+# Inputs:
+    # A GFF annotation file
+    # A text file with chromosome lengths
+# Outputs:
+    # BED files containing genomic coordinates for "CDS", "5' UTR", "3' UTR", "promoter", "intron", and "intergenic" regions
 # ---
 
 usage() {
